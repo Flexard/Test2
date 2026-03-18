@@ -8,6 +8,7 @@ import random
 #----Variables----
 
 hunger = 100
+health = 100
 
 #----Functions----
 
@@ -17,7 +18,7 @@ def typewriter(text):
         sys.stdout.flush()
         time.sleep(0.05)
 
-def intro():
+def intro(): #start of the game, giving the user context
     print("------------------------------")
     print("ISLAND ESCAPE - Text Adventure")
     print("------------------------------")
@@ -28,7 +29,7 @@ def intro():
     print()
     typewriter("appeared out of nowhere.")
     print()
-    typewriter("You find yourself lying on the warm sand of a strange island surrounded by a thick jungle and")
+    typewriter("You find yourself lying on the warm sand of a strange island surrounded by a thick forest and")
     print()
     typewriter("towering cliffs and pieces of your boat are scattered all over the beach.")
     print()
@@ -53,6 +54,71 @@ def intro():
     typewriter("-AND ESCAPE BEFORE IT'S TOO LATE")
     print()
 
+def start_menu():#menu (actual start)
+    print("---ISLAND ESCAPE---")
+    print("1. Start Game")
+    print("2. Instructions")
+    print("3. Quit")
+    response = int(input("Please enter your choice: "))
+    if(response == 1):
+        intro()
+        loop = True
+        while loop:
+            loop = False
+    elif(response == 2):
+        print("===HOW TO PLAY===")
+        print()
+        print("In this text adventure game, you must explore the mysterious island, collect items, solve and discover")
+        print("clues and riddles, and repair your boat to escape the island.")
+        print()
+        print("---MOVEMENT---")
+        print()
+        print("You will have to chance to explore different landmarks across the map, such as:")
+        print()
+        print("-Beach")
+        print("-Forest")
+        print("-Cave")
+        print("-Temple")
+        print()
+        print("---INVENTORY---")
+        print()
+        print("As you explore the island, you will find useful items to help repair your boat.")
+        print("These items are stored in your inventory.")
+        print()
+        print("---PUZZLES/RIDDLES---")
+        print()
+        print("Most area's contain puzzles and riddles.")
+        print("Read the puzzles carefully, and solve them to unlock new areas around the map.")
+        print()
+        print("---GOAL---")
+        print()
+        print("Your main objective is to escape from the island.")
+        print("To do this collect the boat part at each specific location.")
+        print()
+        print("-Rudder")
+        print("-Rope")
+        print("-Sail")
+        print("-Engine Part")
+        print()
+        print("---IMPORTANT---")
+        print()
+        print("-Some choices will effect or health and hunger bar ")
+        print("-You can restart the game whenever")
+        print("-HAVE FUN!")
+        print()
+        response = input("Do you want to return to the main menu? (Y/N): ")
+        if response == "Y" or response == "y":
+                start_menu()
+        elif response == "N" or response == "n":
+                exit()
+
+
+    elif(response == 3):
+        exit()
+
+
+
+
 #----Start----
 
-intro()
+start_menu()
