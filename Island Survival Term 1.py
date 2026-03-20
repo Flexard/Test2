@@ -12,7 +12,17 @@ hunger = 100
 health = 100
 
 #----Functions----
-
+def check(q):
+    while True:
+        try:
+            value1 = int(input(q))
+        except:
+            print("Error: Enter a number")
+        else:
+            if value1 < 1 or value1 > 3:
+                print("Error: Out of range")
+            else:
+                return value1
 def typewriter(text):
     for char in text:
         sys.stdout.write(char)
@@ -60,21 +70,24 @@ def start_menu():#menu (actual start)
     print("1. Start Game")
     print("2. Instructions")
     print("3. Quit")
-    response = int(input("Please enter your choice: "))
+    response = check("Please enter your choice: ")
     if(response == 1):
         intro()
         loop = True
         while loop:
             loop = False
     elif(response == 2):
+        print()
         print("===HOW TO PLAY===")
         print()
-        print("In this text adventure game, you must explore the mysterious island, collect items, solve and discover")
-        print("clues and riddles, and repair your boat to escape the island.")
+        typewriter("In this text adventure game, you must explore the mysterious island, collect items, solve and discover")
+        print()
+        typewriter("clues and riddles, and repair your boat to escape the island.")
+        print()
         print()
         print("---MOVEMENT---")
         print()
-        print("You will have to chance to explore different landmarks across the map, such as:")
+        typewriter("You will have to chance to explore different landmarks across the map, such as:")
         print()
         print("-Beach")
         print("-Forest")
@@ -83,18 +96,21 @@ def start_menu():#menu (actual start)
         print()
         print("---INVENTORY---")
         print()
-        print("As you explore the island, you will find useful items to help repair your boat.")
-        print("These items are stored in your inventory.")
+        typewriter("As you explore the island, you will find useful items to help repair your boat.")
+        print()
+        typewriter("These items are stored in your inventory.")
         print()
         print("---PUZZLES/RIDDLES---")
         print()
-        print("Most area's contain puzzles and riddles.")
-        print("Read the puzzles carefully, and solve them to unlock new areas around the map.")
+        typewriter("Most area's contain puzzles and riddles.")
+        print()
+        typewriter("Read the puzzles carefully, and solve them to unlock new areas around the map.")
         print()
         print("---GOAL---")
         print()
-        print("Your main objective is to escape from the island.")
-        print("To do this collect the boat part at each specific location.")
+        typewriter("Your main objective is to escape from the island.")
+        print()
+        typewriter("To do this collect the boat part at each specific location.")
         print()
         print("-Rudder")
         print("-Rope")
