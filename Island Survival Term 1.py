@@ -9,6 +9,11 @@ import random
 
 #----Variables----
 
+
+rudder = 1
+sail = 2
+engine_part = 3
+rope = 4
 player_name = ""
 inventory = []
 hunger = 100
@@ -17,6 +22,14 @@ health = 100
 #----Functions----
 
 
+def health_bar():
+    bar_length = 10
+
+    filled = int((health / 100) * bar_length)
+    empty = bar_length - filled
+
+    bar = "⬜" * filled + "⬛" * empty
+    print(f"Health: [{bar}]{health}/100")
 
 
 def check(q):
@@ -47,7 +60,7 @@ def typewriter(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.0008) #good reading speed (0.08)
+        time.sleep(0.08) #good reading speed (0.08)
 
 def intro(): #start of the game, giving the user context
     print("------------------------------")
@@ -136,7 +149,7 @@ def start_menu():#menu (actual start)
         typewriter("To do this collect the boat part at each specific location.")
         print()
         print("-Rudder")
-        print("-Steering Wheel")
+        print("-Rope")
         print("-Sail")
         print("-Engine Part")
         print()
@@ -160,6 +173,7 @@ def start_menu():#menu (actual start)
         exit()
 
 def riddles():
+    global health
     riddles = [
         {"question": "I speak without a mouth and hear without ears. What am I?", "answer": "echo"},
         {"question": "What has keys but can't open locks?", "answer": "piano"},
@@ -168,17 +182,41 @@ def riddles():
     ]
 
     riddle = random.choice(riddles)
+    answer = riddle["answer"]
 
-    print(riddle["question"])
-    answer = input("Your answer: ").lower()
+    typewriter(riddle["question"])
+    print()
 
-    if answer == riddle["answer"]:
-        print("Correct!- The chest opens.")
-        return True
+    attempts = 0
 
-    else:
-        print("Wrong answer. The chest stays locked.")
-        return False
+    while True:
+        guess = input("Your answer: ").lower()
+
+        health -= 10
+        print(f"Health: {health}")
+        health_bar()
+
+        if health <= 0:
+            print("You have ran out of health... Game Over.")
+            start_menu()
+            return False
+
+        if guess == answer:
+            typewriter("Correct!- The chest opens.")
+            print()
+            return True
+
+        else:
+            attempts += 1
+            typewriter("Wrong answer. The chest remains locked.")
+            print()
+
+            revealed = answer[:attempts]
+            hidden = "_" * (len(answer) - attempts)
+
+            print("Hint:", revealed + hidden)
+
+
 
 
 
@@ -226,10 +264,24 @@ def beach():
             result = riddles()
 
             if result:
-                print("You found a hammer!")
-                inventory.append("hammer")
-            else:
-                movement()
+                typewriter("You found a hammer!")
+                print()
+                inventory.append("Hammer")
+
+                response = input("Make your way back to the rudder. Y/N:")
+                if response == "Y" or response == "y":
+                    print()
+                    typewriter("You made your way back, and broke the rocks with your hammer to get the rudder.")
+                    print()
+                    inventory.append("Rudder")
+                    print("Inventory:", inventory)
+                    print()
+                    movement()
+
+                elif response == "N" or response == "n":
+                    movement()
+
+
 
 
 
@@ -248,18 +300,28 @@ def beach_event():
 
     if event == 1:
         typewriter("you find water.")
-        inventory.append("water")
+        inventory.append("Water")
         print()
-        print(inventory)
+        print("Inventory", inventory)
         typewriter("And right next to it is your tool chest")
 
     elif event == 2:
         typewriter("you step on sharp glass!")
         global health
         health -= 10
+        print()
+        health_bar()
 
     else:
         typewriter("you find your tool chest.")
+
+#def forest_event():
+
+#def cave_event():
+
+#def temple_ruins_event():
+
+
 
 #----Start----
 
