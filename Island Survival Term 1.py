@@ -73,7 +73,7 @@ def typewriter(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.08) #good reading speed (0.08)
+        time.sleep(0.0008) #good reading speed (0.08)
 
 
 def intro(): #start of the game, giving the user context
@@ -476,7 +476,7 @@ def cave(): #for the sail
                         print("Inventory:", inventory)
                         print()
 
-                        response = check3("Craft the Sail?: Y/N:")
+                        response = check3("Craft the Sail?: Y/N:") # Crafting system
 
                         if response == "Y" or response == "y":
                             if "Rope" in inventory and "Sheet" in inventory:
