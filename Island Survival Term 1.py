@@ -3,16 +3,16 @@
 
 #Library Imports
 
-import time, sys
-import random
+import time, sys    #for typewriter function
+import random       #for random events in the game
 
 
 #----Variables----
 
-inventory = []
-health = 100
-visited = set()
-required_items = {"Rudder", "Keel", "Sail", "Engine Part"}
+inventory = []      #players inventory
+health = 100        #players health
+visited = set()     #keep track of what the user explored locations
+required_items = {"Rudder", "Keel", "Sail", "Engine Part"} #items needed to repair the boat
 
 #----Functions----
 
@@ -23,9 +23,10 @@ def health_bar():
     if health <= 0 or health < 10:
         print(f"Health: {health}/100")
         print("You ran out of health. GAME OVER!")
-        start_menu()
+        start_menu()  #go back to start menu
         return
 
+    # Visual Health Bar
     bar_length = 10
 
     filled = int((health / 100) * bar_length)
@@ -72,7 +73,7 @@ def typewriter(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.0008) #good reading speed (0.08)
+        time.sleep(0.08) #good reading speed (0.08)
 
 
 def intro(): #start of the game, giving the user context
@@ -100,7 +101,7 @@ def intro(): #start of the game, giving the user context
     print()
     typewriter("wants to be solved.")
     print()
-    typewriter("YOUR GOAL IS SIMPLE:")
+    typewriter("YOUR GOAL IS SIMPLE:") #tells the user the goal
     print()
     typewriter("-EXPLORE THE ISLAND")
     print()
@@ -118,14 +119,15 @@ def start_menu():#menu (actual start)
     print("2. Instructions")
     print("3. Quit")
     response = check("Please enter your choice: ")
-    if(response == 1):
+    if response == 1:
         intro()
+        # Startthe main game loop
         loop = True
         while loop:
-            loop = False
-    elif(response == 2):
+            loop = False # Stops immediately, goes back to movement
+    elif response == 2:
         print()
-        print("===HOW TO PLAY===")
+        print("===HOW TO PLAY===") # instructions for the game
         print()
         typewriter("In this text adventure game, you must explore the mysterious island, collect items, solve and discover")
         print()
@@ -183,7 +185,7 @@ def start_menu():#menu (actual start)
 
 
     elif(response == 3):
-        exit()
+        exit() # quit the game
 
 def riddles():
     global health
@@ -217,7 +219,7 @@ def riddles():
             return True
 
         else:
-            health -= 10
+            health -= 10 # Wrong answer = -10 health
             print(f"Health: {health}")
             health_bar()
 
@@ -240,46 +242,51 @@ def riddles():
 
 
 
-def movement():
+def movement(): # locations, presents options for the user
 
-    if len(visited) == 4:
-        typewriter("You have explored everywhere...")
-        boat_escape()
-        return
+    while True:
+        if len(visited) == 4:
 
-    print("Where would you like to explore?")
-    if "beach" not in visited:
-        print("1. Beach")
-    if "forest" not in visited:
-        print("2. Forest")
-    if "cave" not in visited:
-        print("3. Cave")
-    if "temple_ruins" not in visited:
-        print("4. Temple Ruins")
+            if not all(item in inventory for item in required_items):
+                typewriter("You have explored everywhere...")
+            boat_escape()
+            return
 
-    response = check2("Please enter your choice: ")
+        print("Where would you like to explore?")
+        if "beach" not in visited:
+            print("1. Beach")
+        if "forest" not in visited:
+            print("2. Forest")
+        if "cave" not in visited:
+            print("3. Cave")
+        if "temple_ruins" not in visited:
+            print("4. Temple Ruins")
 
-    if response == 1 and "beach" not in visited:
-        visited.add("beach")
-        beach()
+        response = check2("Please enter your choice: ")
 
-    elif response == 2 and "forest" not in visited:
-        visited.add("forest")
-        forest()
+        if response == 1 and "beach" not in visited:
+            visited.add("beach")
+            beach()
 
-    elif response == 3 and "cave" not in visited:
-        visited.add("cave")
-        cave()
+        elif response == 2 and "forest" not in visited:
+            visited.add("forest")
+            forest()
 
-    elif response == 4 and "temple_ruins" not in visited:
-        visited.add("temple_ruins")
-        temple_ruins()
+        elif response == 3 and "cave" not in visited:
+            visited.add("cave")
+            cave()
 
-    else:
-        typewriter("You have already explored this area.")
-        movement()
+        elif response == 4 and "temple_ruins" not in visited:
+            visited.add("temple_ruins")
+            temple_ruins()
 
-def beach():
+        else:
+            typewriter("You have already explored this area.")
+
+
+# Locations
+
+def beach(): # for the rudder
     typewriter("You choose to explore the beach, look through the wreckage for a rudder to repair your boat.")
     print()
     response = check3("Search for the rudder? Y/N:")
@@ -312,6 +319,7 @@ def beach():
                     typewriter("You made your way back, and broke the rocks with your hammer to get the rudder.")
                     print()
                     inventory.append("Rudder")
+                    visited.add("beach")
                     print("Inventory:", inventory)
                     print()
                     movement()
@@ -326,7 +334,7 @@ def beach():
     elif response == "N" or response == "n":
             movement()
 
-def forest():
+def forest(): #for the keel
     typewriter("You chose to explore the forest, look around for useful resources and the keel to help repair your boat.")
     print()
     response = check3("Search for the keel? Y/N: ")
@@ -380,6 +388,7 @@ def forest():
                         typewriter("Using your knife. It runs off, but it drops something...")
                         print()
                         inventory.append("Keel")
+                        visited.add("forest")
                         print("Inventory:", inventory)
                         print()
                         movement()
@@ -408,7 +417,7 @@ def forest():
         movement()
 
 
-def cave():
+def cave(): #for the sail
     typewriter("As you were searching the beach, you noticed the sail had a huge hole in the middle and was")
     print()
     typewriter("no longer useable.")
@@ -473,6 +482,7 @@ def cave():
                             if "Rope" in inventory and "Sheet" in inventory:
                                 typewriter("Sail crafted.")
                                 inventory.append("Sail")
+                                visited.add("cave")
                                 inventory.remove("Rope")
                                 inventory.remove("Sheet")
                                 print()
@@ -513,7 +523,7 @@ def cave():
         movement()
 
 
-def temple_ruins():
+def temple_ruins(): # for the engine part
     typewriter("As you were searching your boat you noticed that a part of the engine was busted,")
     print()
     typewriter("and needed a specific part to fix it.")
@@ -560,7 +570,8 @@ def temple_ruins():
                 if result:
                     print()
                     typewriter("Inside you find the engine part!")
-                    inventory.append("Engine part")
+                    inventory.append("Engine Part")
+                    visited.add("temple_ruins")
                     print()
                     print("Inventory:", inventory)
                     print()
@@ -590,7 +601,7 @@ def temple_ruins():
 
 
 
-
+# Random events can affect the users health
 
 def beach_event():
     event = random.randint(1,3)
@@ -678,21 +689,66 @@ def temple_ruins_event():
         print("Inventory", inventory)
         print()
 
+def main_game():
+    global visited, inventory, health
+    visited = set()
+    inventory = []
+    health = 100
+
+    game_running = True
+    while game_running:
+
+        if len(visited) == 4:
+            typewriter("You have explored everywhere...")
+            boat_escape()
+            game_running = False
+            break
+
+
 def boat_escape():
     print()
     typewriter("Repair your boat and get off this island before it's too late!")
+    print()
 
     response = check3("Return to boat? Y/N:")
 
     if response == "Y" or response == "y":
         print()
-        typewriter("You returned to your boat!")
-        print()
 
+        print("Inventory", inventory)
+        print("Required items:", required_items)
+
+        if all(item in inventory for item in required_items):
+            print()
+            typewriter("You used all the materials to repair the boat...")
+            print()
+            typewriter("The engine slowly starts.")
+            print()
+            typewriter("You escape the island safely. You Win!")
+            print()
+            response = check3("Do you want to play again? Y/N:")
+            if response == "Y" or response == "y":
+                start_menu()
+            elif response == "N" or response == "n":
+                exit()
+
+        else:
+            typewriter("You don't have everything to fix the boat.")
+            print()
+            print("You still need:")
+
+            for item in required_items:
+                if item not in inventory:
+                    print(f"- {item}")
+
+            print()
+            typewriter("Explore the island to find all the missing parts.")
+            return
 
 
 #----Start----
 
 start_menu()
 print()
-movement()
+movement() #Begin exploration loop
+
