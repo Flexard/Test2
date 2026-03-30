@@ -9,20 +9,23 @@ import random
 
 #----Variables----
 
-
-rudder = 1
-sail = 2
-engine_part = 3
-rope = 4
-player_name = ""
 inventory = []
-hunger = 100
 health = 100
+visited = set()
+required_items = {"Rudder", "Keel", "Sail", "Engine Part"}
 
 #----Functions----
 
 
 def health_bar():
+    global health
+
+    if health <= 0 or health < 10:
+        print(f"Health: {health}/100")
+        print("You ran out of health. GAME OVER!")
+        start_menu()
+        return
+
     bar_length = 10
 
     filled = int((health / 100) * bar_length)
@@ -32,7 +35,7 @@ def health_bar():
     print(f"Health: [{bar}]{health}/100")
 
 
-def check(q):
+def check(q): #function for start multi-choice
     while True:
         try:
             value1 = int(input(q))
@@ -44,7 +47,7 @@ def check(q):
             else:
                 return value1
 
-def check2(q):
+def check2(q): #function for movement multi-choice
     while True:
         try:
             value1 = int(input(q))
@@ -56,11 +59,21 @@ def check2(q):
             else:
                 return value1
 
+def check3(q): #function for Y/N multi-choice
+    while True:
+        value1 = input(q).strip().lower()
+
+        if value1 == "y" or value1 == "n":
+            return value1
+        else:
+            print("Error: Try again")
+
 def typewriter(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.08) #good reading speed (0.08)
+        time.sleep(0.0008) #good reading speed (0.08)
+
 
 def intro(): #start of the game, giving the user context
     print("------------------------------")
@@ -149,7 +162,7 @@ def start_menu():#menu (actual start)
         typewriter("To do this collect the boat part at each specific location.")
         print()
         print("-Rudder")
-        print("-Rope")
+        print("-Keel")
         print("-Sail")
         print("-Engine Part")
         print()
@@ -162,7 +175,7 @@ def start_menu():#menu (actual start)
         typewriter("-HAVE FUN!")
         print()
         print()
-        response = input("Do you want to return to the main menu? (Y/N): ")
+        response = check3("Do you want to return to the main menu? (Y/N): ")
         if response == "Y" or response == "y":
                 start_menu()
         elif response == "N" or response == "n":
@@ -178,7 +191,13 @@ def riddles():
         {"question": "I speak without a mouth and hear without ears. What am I?", "answer": "echo"},
         {"question": "What has keys but can't open locks?", "answer": "piano"},
         {"question": "The more you take, the more you leave behind. What am I?", "answer": "footsteps"},
-        {"question": "I am always in front of you, but can never be seen. What am I?", "answer": "the future"}
+        {"question": "I am an odd number. Take away a letter and I become even. What number am I?", "answer": "seven"},
+        {"question": "What is always on its way but never arrives?", "answer": "tomorrow"},
+        {"question": "Poor people have it. Rich people need it. If you eat it you die. What is it?", "answer": "nothing"},
+        {"question": "What can fill a room without taking up any space?", "answer": "light"},
+        {"question": "Forward, it's heavy. Backward, it's not. What is it?", "answer": "ton"},
+        {"question": "What goes up but never comes down?", "answer": "age"},
+        {"question": "Which word in the dictionary is spelled incorrectly?", "answer": "incorrectly"}
     ]
 
     riddle = random.choice(riddles)
@@ -192,21 +211,21 @@ def riddles():
     while True:
         guess = input("Your answer: ").lower()
 
-        health -= 10
-        print(f"Health: {health}")
-        health_bar()
-
-        if health <= 0:
-            print("You have ran out of health... Game Over.")
-            start_menu()
-            return False
-
         if guess == answer:
             typewriter("Correct!- The chest opens.")
             print()
             return True
 
         else:
+            health -= 10
+            print(f"Health: {health}")
+            health_bar()
+
+            if health <= 0:
+                print("You have ran out of health... Game Over.")
+                start_menu()
+                return False
+
             attempts += 1
             typewriter("Wrong answer. The chest remains locked.")
             print()
@@ -222,29 +241,48 @@ def riddles():
 
 
 def movement():
+
+    if len(visited) == 4:
+        typewriter("You have explored everywhere...")
+        boat_escape()
+        return
+
     print("Where would you like to explore?")
-    print("1. Beach")
-    print("2. Forest")
-    print("3. Cave")
-    print("4. Temple Ruins")
+    if "beach" not in visited:
+        print("1. Beach")
+    if "forest" not in visited:
+        print("2. Forest")
+    if "cave" not in visited:
+        print("3. Cave")
+    if "temple_ruins" not in visited:
+        print("4. Temple Ruins")
+
     response = check2("Please enter your choice: ")
 
-    if(response == 1):
+    if response == 1 and "beach" not in visited:
+        visited.add("beach")
         beach()
 
-    elif(response == 2):
+    elif response == 2 and "forest" not in visited:
+        visited.add("forest")
         forest()
 
-    elif(response == 3):
+    elif response == 3 and "cave" not in visited:
+        visited.add("cave")
         cave()
 
-    elif(response == 4):
-        temple()
+    elif response == 4 and "temple_ruins" not in visited:
+        visited.add("temple_ruins")
+        temple_ruins()
+
+    else:
+        typewriter("You have already explored this area.")
+        movement()
 
 def beach():
-    typewriter("You choose to stay at the beach, explore the wreckage for a rudder to repair your boat.")
+    typewriter("You choose to explore the beach, look through the wreckage for a rudder to repair your boat.")
     print()
-    response = input("Search for the rudder? Y/N:")
+    response = check3("Search for the rudder? Y/N:")
 
     if response == "Y" or response == "y":
             print()
@@ -268,7 +306,7 @@ def beach():
                 print()
                 inventory.append("Hammer")
 
-                response = input("Make your way back to the rudder. Y/N:")
+                response = check3("Make your way back to the rudder. Y/N:")
                 if response == "Y" or response == "y":
                     print()
                     typewriter("You made your way back, and broke the rocks with your hammer to get the rudder.")
@@ -289,11 +327,270 @@ def beach():
             movement()
 
 def forest():
-    print("HI")
+    typewriter("You chose to explore the forest, look around for useful resources and the keel to help repair your boat.")
+    print()
+    response = check3("Search for the keel? Y/N: ")
+    if response == "Y" or response == "y":
+        print()
+        typewriter("At the beach the keel is nowhere to be found. You suggest that the wind from the storm has blown the keel deep")
+        print()
+        typewriter("into the forest.")
+        print()
+        typewriter("You decide to head into the forest, hoping to find useful resources and the keel.")
+        print()
+        typewriter("The trees tower above you, blocking out most of the sunlight. You hear strange noises...")
+        print()
+        response = check3("Continue deeper into the forest? Y/N: ")
+
+        if response == "Y" or response == "y":
+            print()
+            typewriter("You carefully follow the narrow path.")
+            print()
+            typewriter("After the while you come across an abandoned campsite.")
+            print()
+            response = check3("Search the campsite? Y/N: ")
+
+            if response == "Y" or response == "y":
+                print()
+                typewriter("You search through the campsite and find a locked supply crate.")
+                print()
+                typewriter("But to open the crate you need to solve a riddle:")
+                print()
+
+                result = riddles()
+
+                if result:
+                    print()
+                    typewriter("The crate opens. Inside, you find a sharp knife and banana's.")
+                    print()
+                    inventory.append("Knife")
+                    inventory.append("Banana's")
+                    print("Inventory:", inventory)
+
+                    print()
+                    typewriter("As your leaving, you hear rustling in the bushes nearby...")
+                    print()
+
+                    response = check3("Investigate the noise? Y/N: ")
+
+                    if response == "Y" or response == "y":
+                        print()
+                        forest_event()
+                        print()
+                        typewriter("Using your knife. It runs off, but it drops something...")
+                        print()
+                        inventory.append("Keel")
+                        print("Inventory:", inventory)
+                        print()
+                        movement()
+
+                    elif response == "N" or response == "n":
+                        print()
+                        typewriter("You decide it's safer not to risk it and leave the forest.")
+                        print()
+                        movement()
+
+            elif response == "N" or response == "n":
+                print()
+                typewriter("You ignore the campsite and continue walking until the forest becomes to dark.")
+                print()
+                typewriter("With no clear path forward, you head back.")
+                print()
+                movement()
+
+        elif response == "N" or response == "n":
+            print("You don't want to get lost in the forest and turn back.")
+            print()
+            movement()
+
+
+    elif response == "N" or response == "n":
+        movement()
+
+
 def cave():
-    print("Hello")
-def temple():
-    print("Yes")
+    typewriter("As you were searching the beach, you noticed the sail had a huge hole in the middle and was")
+    print()
+    typewriter("no longer useable.")
+    print()
+    typewriter("Then you noticed a cave close by... Find items to craft a new sail.")
+    print()
+    print("Sail Requirements: (Rope),(Sheet)")
+    print()
+
+    response = check3("Enter the cave? Y/N:")
+
+    if response == "Y" or response == "y":
+        typewriter("You step into the cave, your footsteps and water droplets echoing against the slippery stone.")
+        print()
+        typewriter("As your eyes adjust to the darkness, you notice another narrow cave entrance.")
+        print()
+
+        response = check3("Explore deeper into the cave? Y/N: ")
+
+        if response == "Y" or response == "y":
+            print()
+            typewriter("You move deeper into the cave, crawling and sliding through narrow pathways and discover a hidden chamber.")
+            print()
+            typewriter("In the chamber lies an ancient box covered in dust and strange markings.")
+            print()
+
+            response = check3("Open the box? Y/N: ")
+
+            if response == "Y" or response == "y":
+                print()
+                typewriter("The box is locked. To unlock it you need to solve a riddle.")
+                print()
+
+                result = riddles()
+
+                if result:
+                    print()
+                    typewriter("Inside, you find a rope and a torch.")
+                    print()
+                    inventory.append("Rope")
+                    inventory.append("Torch")
+                    print("Inventory:", inventory)
+
+                    print()
+                    typewriter("As your grabbing the items, you suddenly feel the the ground rumbling and the door behind you slowly closing.")
+                    print()
+                    response = check3("Run out of the room? Y/N: ")
+                    if response == "Y" or response == "y":
+                        print()
+                        typewriter("As your sprinting out of the room,")
+                        cave_event()
+
+                        typewriter("you sprint back towards the entrance, picking up the sheet on your way")
+                        print()
+                        inventory.append("Sheet")
+                        print("Inventory:", inventory)
+                        print()
+
+                        response = check3("Craft the Sail?: Y/N:")
+
+                        if response == "Y" or response == "y":
+                            if "Rope" in inventory and "Sheet" in inventory:
+                                typewriter("Sail crafted.")
+                                inventory.append("Sail")
+                                inventory.remove("Rope")
+                                inventory.remove("Sheet")
+                                print()
+                                print("Inventory:", inventory)
+
+                            else:
+                                typewriter("You need Rope and a Sheet to craft the Sail")
+                            print()
+                            movement()
+
+                        elif response == "N" or response == "n":
+                            movement()
+
+                    elif response == "N" or response == "n":
+                        print()
+                        typewriter("You hesitate, and the rocks pile on you.")
+                        print()
+                        typewriter("Game Over...")
+                        print()
+                        start_menu()
+
+            elif response == "N" or response == "n":
+                print()
+                typewriter("You decided to not risk opening the box and leave the cave.")
+                print()
+                movement()
+
+        elif response == "N" or response == "n":
+            print()
+            typewriter("You feel uneasy and decide to leave the cave.")
+            print()
+            movement()
+
+    elif response == "N" or response == "n":
+        print()
+        typewriter("You decide it's too dangerous to enter and head back.")
+        print()
+        movement()
+
+
+def temple_ruins():
+    typewriter("As you were searching your boat you noticed that a part of the engine was busted,")
+    print()
+    typewriter("and needed a specific part to fix it.")
+    print()
+    typewriter("As you were searching around for the part, you noticed a strange building in the distance.")
+    print()
+    typewriter("When you got closer you saw that it was temple ruins.")
+    print()
+    typewriter("Explore the ruins to find the missing engine part.")
+    print()
+    response = check3("Enter? Y/N:")
+
+    if response == "Y" or response == "y":
+        typewriter("You step into the temple, your footsteps echoing while you're stepping over vines.")
+        print()
+        typewriter("As you walk deeper into the temple you stumble across 3 doors.")
+        print()
+        print("1. Door 1")
+        print("2. Door 2")
+        print("3. Door 3")
+        response = check("Which door do you pick?: ")
+
+        typewriter("When you walk through the door,")
+
+        temple_ruins_event()
+
+        response = check3("Explore deeper? Y/N:")
+
+        if response == "Y" or response == "y":
+            typewriter("You move deeper into the temple, dodging and weaving through obstacles and booby traps.")
+            print()
+            typewriter("Until you discover upon another door.")
+            print()
+            response = check3("Open the door? Y/N:")
+
+            if response == "Y" or response == "y":
+                typewriter("When you open the door you see a large chest in the center of the room.")
+                print()
+                typewriter("You try to open it but it's locked.")
+                print()
+                typewriter("And to unlock it you need to answer a riddle.")
+                print()
+                result = riddles()
+                if result:
+                    print()
+                    typewriter("Inside you find the engine part!")
+                    inventory.append("Engine part")
+                    print()
+                    print("Inventory:", inventory)
+                    print()
+
+                    response = check3("Leave the temple? Y/N:")
+
+                    if response == "Y" or response == "y":
+                        print()
+                        movement()
+
+                    elif response == "N" or response == "n":
+                        typewriter("You decided to keep looking for more resources, and fell into a booby trap!")
+                        print("Game Over...")
+
+            elif response == "N" or response == "n":
+                typewriter("You decided to not risk it, and left the temple.")
+                movement()
+
+        elif response == "N" or response == "n":
+            typewriter("You felt uneasy to enter, and left the temple.")
+            movement()
+
+    elif response == "N" or response == "n":
+        typewriter("You decided it was to dangerous and headed back.")
+        movement()
+
+
+
+
+
 
 def beach_event():
     event = random.randint(1,3)
@@ -315,11 +612,82 @@ def beach_event():
     else:
         typewriter("you find your tool chest.")
 
-#def forest_event():
+def forest_event():
+    global health
 
-#def cave_event():
+    event = random.randint(1,2)
 
-#def temple_ruins_event():
+    if event == 1:
+        typewriter("I wild mongoose attacks you!")
+        health -= 10
+        print()
+        health_bar()
+        print()
+
+
+    elif event == 2:
+        typewriter("You discover a trapped animal caught in vines.")
+
+
+
+def cave_event():
+    global health
+
+    event = random.randint(1,3)
+
+    if event == 1:
+        typewriter("A small rock hit you in the head!")
+        health -= 10
+        print()
+        health_bar()
+        print()
+
+    elif event == 2:
+        typewriter("You trip and the rocks blocks the entrance!")
+        health -=20
+        print()
+        health_bar()
+        print()
+
+    elif event == 3:
+        typewriter("You slide before the rocks could hit you.")
+
+
+def temple_ruins_event():
+    global health
+
+    event = random.randint(1,3)
+
+    if event == 1:
+        typewriter(" a poison arrow shoots you in the foot!")
+        health -= 20
+        print()
+        health_bar()
+        print()
+
+    elif event == 2:
+        typewriter(" a wild boar attacks you!")
+        health -= 10
+        print()
+        health_bar()
+        print()
+
+    elif event == 3:
+        typewriter(" you find a chest full of apples!")
+        inventory.append("Apples")
+        print("Inventory", inventory)
+        print()
+
+def boat_escape():
+    print()
+    typewriter("Repair your boat and get off this island before it's too late!")
+
+    response = check3("Return to boat? Y/N:")
+
+    if response == "Y" or response == "y":
+        print()
+        typewriter("You returned to your boat!")
+        print()
 
 
 
