@@ -73,7 +73,7 @@ def typewriter(text):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(0.0008) #good reading speed (0.08)
+        time.sleep(0.08) #good reading speed (0.08)
 
 
 def intro(): #start of the game, giving the user context
@@ -121,7 +121,7 @@ def start_menu():#menu (actual start)
     response = check("Please enter your choice: ")
     if response == 1:
         intro()
-        # Startthe main game loop
+        # Start the main game loop
         loop = True
         while loop:
             loop = False # Stops immediately, goes back to movement
@@ -686,6 +686,7 @@ def temple_ruins_event():
     elif event == 3:
         typewriter(" you find a chest full of apples!")
         inventory.append("Apples")
+        print()
         print("Inventory", inventory)
         print()
 
