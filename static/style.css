@@ -1,0 +1,405 @@
+body {
+    font-family: "Arial Rounded MT Bold";
+    background-image: url("Football Pitch");
+    background-size: cover;
+    background-position: center top 14%;
+    background-attachment: fixed;
+    margin: 25px;
+}
+
+/* WEBPAGE TITLE */
+
+h1 {
+    background-color: white;
+    color: green;
+    padding: 20px;
+    text-align: center;
+    margin-top: -25px;
+    border-radius: 10px;
+    border: black solid 3px;
+}
+
+/* SECONDARY TITLE */
+
+h2 {
+    color: white;
+    position: relative;
+    top: 0;
+    left: 80px;
+}
+
+/* SEARCH BAR */
+
+form {
+    margin-bottom: 25px;
+    padding: 25px;
+
+}
+
+input {
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+/* BUTTONS */
+
+button {
+    padding: 10px 15px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* CATEGORIES */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 700px;
+    margin: 25px auto;
+}
+
+.category {
+    display: block;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 0;
+    padding: 25px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: green;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.category:hover {
+    background-color: white;
+}
+
+/* CATEGORY POSITIONS */
+
+.all-players {
+    position: relative;
+    top: 10px;
+    left: -380px;
+}
+
+.goalkeepers {
+    position: relative;
+    top: -40px;
+    left: -180px;
+}
+
+.defenders {
+    position: relative;
+    top: 60px;
+    left: 180px;
+}
+
+.midfielders {
+    position: relative;
+    top: 250px;
+    left: -175px;
+}
+
+.forwards {
+    position: relative;
+    top: 350px;
+    left: 180px;
+}
+
+.player-table {
+    position: relative;
+    top: -80px;
+    left: -737px;
+}
+
+/* PLAYER GRID */
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* PLAYER CARDS */
+
+.player-card {
+    background-color: white;
+    border: 2px solid black;
+    padding: 20px;
+    border-radius: 0;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    margin-top: 25px;
+}
+
+.player-card img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.player-card h2 {
+    color: green;
+    text-align: center;
+    position: static;
+    left: auto;
+    margin: 5px 0;
+}
+
+.player-card a {
+    display: inline-block;
+    color: green;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: auto;
+    padding-bottom: 5px;
+}
+
+.player-card a:hover {
+    text-decoration: underline;
+}
+
+/* LINKS */
+
+a {
+    color: black;
+    font-weight: bold;
+}
+
+/* PLAYER PROFILE PAGE */
+
+.player-page {
+    margin: 0;
+    padding: 25px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.player-profile {
+    background-color: white;
+    border: none;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+/* PLAYER NAME */
+
+.profile-title {
+    color: green;
+    background-color: white;
+    border: none;
+    text-align: center;
+    margin: 0 auto 30px;
+    padding: 15px;
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* PROFILE LAYOUT */
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 35px;
+    align-items: center;
+}
+
+/* PLAYER INFORMATION */
+
+.profile-information {
+    padding: 15px;
+    text-align: center;
+}
+
+.profile-information h2,
+.profile-description h2 {
+    color: green;
+    text-align: center;
+    position: static;
+    left: auto;
+    margin: 0 0 20px;
+}
+
+.profile-information p {
+    color: black;
+    font-size: 17px;
+    padding: 12px 5px;
+    margin: 0;
+    border: none;
+}
+
+/* PLAYER PHOTO - SAME SIZE FOR EVERY PLAYER */
+
+.profile-image {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+/* PLAYER DESCRIPTION */
+
+.profile-description {
+    margin-top: 30px;
+    padding: 20px;
+    border: none;
+}
+
+.profile-description p {
+    color: black;
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+    border: none;
+}
+
+/* BACK BUTTON */
+
+.profile-back {
+    display: block;
+    width: fit-content;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding: 13px 22px;
+    margin: 25px auto 0;
+    font-weight: bold;
+}
+
+.profile-back:hover {
+    background-color: darkgreen;
+}
+
+/* REMOVE UNWANTED PROFILE LINES */
+
+.profile-description,
+.profile-description p,
+.profile-description h2,
+.profile-information p {
+    border: none;
+}
+
+/* SMALLER SCREENS */
+
+@media (max-width: 750px) {
+    .player-page {
+        padding: 10px;
+    }
+
+    .player-profile {
+        padding: 15px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .profile-image {
+        height: 350px;
+    }
+
+    .profile-title {
+        font-size: 25px;
+    }
+
+    .player-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* SMALLER SCREENS */
+
+@media (max-width: 750px) {
+    .player-page {
+        padding: 10px;
+    }
+
+    .player-profile {
+        padding: 15px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .profile-image {
+        height: 350px;
+    }
+
+    .profile-title {
+        font-size: 25px;
+    }
+
+    .player-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 450px) {
+    .player-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* PLAYER TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    margin-top: 20px;
+}
+
+th {
+    background-color: green;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+
+table a {
+    color: green;
+    font-weight: bold;
+    text-decoration: none;
+}

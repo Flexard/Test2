@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ category }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>{{ category }}</h1>
+
+<a href="/">Home</a>
+
+{% if category == "All Players" %}
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search player..."
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+
+    <select name="sort">
+
+        <option value="name" {% if sort == "name" %}selected{% endif %}>
+            Name A-Z
+        </option>
+
+        <option value="age" {% if sort == "age" %}selected{% endif %}>
+            Age
+        </option>
+
+        <option value="value" {% if sort == "value" %}selected{% endif %}>
+            Market Value
+        </option>
+
+    </select>
+
+    <button type="submit">Sort</button>
+
+</form>
+
+{% endif %}
+
+
+<div class="player-grid">
+
+{% for player in players %}
+
+<div class="player-card">
+
+    <h2>{{ player["name"] }}</h2>
+
+    <p>Age: {{ player["age"] }}</p>
+    <p>Team: {{ player["team"] }}</p>
+    <p>Position: {{ player["position"] }}</p>
+    <p>Country: {{ player["country"] }}</p>
+    <p>Market Value: €{{ player["market_value"] }}m</p>
+    <p>Captain: {{ player["captain"] }}</p>
+    <p>Preferred Foot: {{ player["preferred_foot"] }}</p>
+    <p>Shirt Number: {{ player["shirt_number"] }}</p>
+
+    <a href="/player/{{ player['name'] }}">More Information</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>

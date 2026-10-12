@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ player["name"] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="player-page">
+
+    <div class="player-profile">
+
+        <!-- Player name -->
+        <h1 class="profile-title">{{ player["name"] }}</h1>
+
+        <!-- Main profile layout -->
+        <div class="profile-layout">
+
+            <!-- Player information -->
+            <div class="profile-information">
+
+                <h2>Player Information</h2>
+
+                <p><strong>Age:</strong> {{ player["age"] }}</p>
+                <p><strong>Team:</strong> {{ player["team"] }}</p>
+                <p><strong>Position:</strong> {{ player["position"] }}</p>
+                <p><strong>Country:</strong> {{ player["country"] }}</p>
+                <p><strong>Market Value:</strong> €{{ player["market_value"] }}m</p>
+                <p><strong>Captain:</strong> {{ player["captain"] }}</p>
+                <p><strong>Preferred Foot:</strong> {{ player["preferred_foot"] }}</p>
+                <p><strong>Shirt Number:</strong> {{ player["shirt_number"] }}</p>
+
+            </div>
+
+            <!-- Large player photo -->
+            <div class="profile-image">
+                <img
+                    src="{{ url_for('static', filename='images/' + player['photo']) }}"
+                    alt="Photo of {{ player['name'] }}"
+                >
+            </div>
+
+        </div>
+
+        <!-- About the player -->
+        <div class="profile-description">
+
+            <h2>About {{ player["name"] }}</h2>
+
+            <p>
+                {{ player["name"] }} plays as a
+                {{ player["position"] }} for {{ player["team"] }}.
+                The player is from {{ player["country"] }} and has a
+                preferred foot of {{ player["preferred_foot"] }}.
+                Their listed market value is €{{ player["market_value"] }} million.
+            </p>
+
+        </div>
+
+        <!-- Back button -->
+        <a href="/all-players" class="profile-back">
+            Back to All Players
+        </a>
+
+    </div>
+
+</body>
+</html>

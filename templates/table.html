@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Player Table</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Player Table</h1>
+
+<a href="/">Home</a>
+
+<table>
+
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Team</th>
+        <th>Position</th>
+        <th>Country</th>
+        <th>Market Value</th>
+    </tr>
+
+    {% for player in players %}
+
+    <tr>
+        <td>{{ player["name"] }}</td>
+        <td>{{ player["age"] }}</td>
+        <td>{{ player["team"] }}</td>
+        <td>{{ player["position"] }}</td>
+        <td>{{ player["country"] }}</td>
+        <td>€{{ player["market_value"] }}m</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</body>
+</html>
